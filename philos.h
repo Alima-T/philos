@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/06 19:15:53 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:32:56 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 #include <sys/time.h>   // for gettimeofday
 #include <pthread.h>    // for pthread_create, pthread_detach, pthread_join, pthread_mutex_init, pthread_mutex_destroy, pthread_mutex_lock, pthread_mutex_unlock
 
-typedef struct philos_s
+typedef struct s_philo
 {
     int id;
     int time_to_die;
     int time_to_eat;
     int time_to_sleep;
-} philos_t;
+} t_philo;
 
 void think(int philo_id, int time_to_sleep);
 void eat(int philo_id, int time_to_eat);

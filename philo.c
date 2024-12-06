@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:45:41 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/06 19:20:06 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:37:22 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void eat(int philo_id, int time_to_eat)
 }
 void *philos_routine(void *arg)
 {
-	philos_t *philo = (philos_t *) arg;
+	t_philo *philo = (t_philo *) arg;
 	int left = philo->id;
 	int right = (philo->id + 1) % 5; // change to num of philos
 	while(1)
@@ -80,7 +80,7 @@ int main(int ac, char **av)
 	}
 
 	pthread_t *philos = (pthread_t *)malloc(num_philos * sizeof(pthread_t));
-	philos_t *philo_data = (philos_t *)malloc(num_philos * sizeof(philos_t));
+	t_philo *philo_data = (t_philo *)malloc(num_philos * sizeof(t_philo));
 	
 	int j = 0;
 	while(j < num_philos)
