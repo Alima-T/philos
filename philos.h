@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/06 19:32:56 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/27 12:17:16 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,30 @@
 
 typedef struct s_philo
 {
-    int id;
-    int time_to_die;
-    int time_to_eat;
-    int time_to_sleep;
-} t_philo;
+	int				id;              /* Номер философа */
+	int				meals_eaten;     /* Кол-во приемов пищи */
+	long long		last_meal;  	/* Время последнего приема пищи */
+	t_data			*data;           /* Указатель на общие данные */
+	pthread_t		thread;          /* Идентификатор потока философа */
+	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
+	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
+}	t_philo;
 
-void think(int philo_id, int time_to_sleep);
-void eat(int philo_id, int time_to_eat);
-void *philos_routine(void *arg);
-int main(int ac, char **av);
+/* Функции инициализации (init.c) */
+int			init_data(t_data *data, int ac, char **av);
+int			init_mutexes(t_data *data);
+int			init_philos(t_philo **philos, t_data *data);
 
+/* Вспомогательные функции (utils.c) */
+long long	get_time(void);              /* Получение текущего времени */
+void		smart_sleep(long long time);  /* Умная задержка */
+void		print_status(t_philo *philo, char *status); /* Печать статуса */
+int			check_death(t_philo *philo);  /* Проверка смерти */
+void		free_all(t_data *data, t_philo *philos); /* Освобождение памяти */
 
-// int ft_strlen (char *str);
-// void *print(void *buf);
+/* Функции действий философов (actions.c) */
+void		*philo_routine(void *arg);    /* Основной цикл философа */
+void		eat(t_philo *philo);          /* Прием пищи */
+void		sleep_think(t_philo *philo);  /* Сон и размышления */
 
-// void *printint(void *buf);
-
-// typedef struct s_philo
-// {
-// 	pthread_t	thread;
-// 	int	id;
-// 	int eating;
-// 	int		meals_eaten;
-// 	int			mum_of_philos;
-// 	int			num_times_to_eat;
-// 	int			*dead;
-// 	size_t		last_meal;
-// 	size_t		time_to_die;
-// 	size_t		time_to_eat;
-// 	size_t		time_to_sleap;
-// 	size_t		start_time;
-// 	pthread_mutex_t	*r_fork;
-// 	pthread_mutex_t	*l_fork;
-// 	pthread_mutex_t	*write_lock;
-// 	pthread_mutex_t	*dead_lock;
-// 	pthread_mutex_t	*meal_lock;
-// }			t_philo;
+#endif
