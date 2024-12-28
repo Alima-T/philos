@@ -6,10 +6,9 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/28 17:22:42 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/28 17:29:21 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "philos.h"
 
@@ -53,6 +52,12 @@ void	eat(t_philo *philos)
 }
 
 
+void	sleep_think(t_philo *philos)
+{
+	philos_msg(SLEEPING, get_time() - philos->data->creation_time, \
+				philos->id, philos->data->print_mutex);
+	eat_or_sleep(philos->data->time_to_sleep);
+}
 /* Функция сна и размышления философа
 ** 1. Выводим сообщение о начале сна
 ** 2. Спим time_to_sleep миллисекунд
@@ -63,12 +68,6 @@ void	eat(t_philo *philos)
 // 	smart_sleep(philo->data->time_to_sleep);
 // 	print_status(philo, "is thinking");
 // }
-void	sleep_think(t_philo *philos)
-{
-	philos_msg(SLEEPING, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
-	eat_or_sleep(philos->data->time_to_sleep);
-}
 
 void	take_forks(t_philo *philos)
 {
