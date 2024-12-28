@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by alima             #+#    #+#             */
-/*   Updated: 2024/12/26 22:37:35 by alima            ###   ########.fr       */
+/*   Updated: 2024/12/28 17:11:46 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,78 +23,136 @@ long long	get_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-/* Умная задержка с периодической проверкой
-** Вместо простого usleep используем активное ожидание
-** с периодическими короткими паузами для более точного timing */
-void	smart_sleep(long long time)
+int	error_msg(int err_num)
 {
-	long long	start;
-
-	start = get_time();
-	while (get_time() - start < time)
-		usleep(500);
+	if (err_num == WRONG_COUNT_OF_ARGS)
+		printf("you passed the wrong number of arguments\n");
+	else if (err_num == WRONG_ARG)
+		printf("you passed the wrong argument\n");
+	else if (err_num == MALLOC_ERROR)
+		printf("malloc error\n");
+	else if (err_num == PTHREAD_ERROR)
+		printf("pthread error\n");
+	return (1);
 }
 
-/* Безопасный вывод статуса философа
-** 1. Блокируем мьютекс печати
-** 2. Проверяем, жив ли философ
-** 3. Выводим сообщение с временной меткой
-** 4. Освобождаем мьютекс */
-void	print_status(t_philo *philo, char *status)
+void	philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex)
 {
-	pthread_mutex_lock(&philo->data->print_mutex);
-	if (!check_death(philo))
-		printf("%lld %d %s\n",
-			get_time() - philo->data->start_time, philo->id, status);
-	pthread_mutex_unlock(&philo->data->print_mutex);
-}
-
-/* Проверка смерти философа
-** 1. Блокируем мьютекс смерти
-** 2. Проверяем флаг общей смерти
-** 3. Проверяем время с последнего приема пищи
-** 4. Если прошло больше time_to_die:
-**    - Устанавливаем флаг смерти
-**    - Выводим сообщение о смерти
-** 5. Освобождаем мьютекс */
-int	check_death(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->data->death_mutex);
-	if (philo->data->someone_died)
+	pthread_mutex_lock(print_mutex);
+	if (msg_code == LEFT_FORK_TAKEN)
+		printf("%ld %d has taken a fork\n", time, id);
+	else if (msg_code == RIGHT_FORK_TAKEN)
+		printf("%ld %d has taken a fork\n", time, id);
+	else if (msg_code == EATING)
+		printf("%ld %d is eating\n", time, id);
+	else if (msg_code == SLEEPING)
+		printf("%ld %d is sleeping\n", time, id);
+	else if (msg_code == THINKING)
+		printf("%ld %d is thinking\n", time, id);
+	else if (msg_code == DIED)
 	{
-		pthread_mutex_unlock(&philo->data->death_mutex);
-		return (1);
+		printf("%ld %d died\n", time, id);
+		return ;
 	}
-	if (get_time() - philo->last_meal_time > philo->data->time_to_die)
-	{
-		philo->data->someone_died = 1;
-		pthread_mutex_unlock(&philo->data->death_mutex);
-		pthread_mutex_lock(&philo->data->print_mutex);
-		printf("%lld %d died\n",
-			get_time() - philo->data->start_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print_mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->death_mutex);
-	return (0);
+	pthread_mutex_unlock(print_mutex);
 }
 
-/* Освобождение всех ресурсов
-** 1. Уничтожаем все мьютексы вилок
-** 2. Уничтожаем мьютексы печати и смерти
-** 3. Освобождаем выделенную память */
-void	free_all(t_data *data, t_philo *philos)
+// /* Умная задержка с периодической проверкой
+// ** Вместо простого usleep используем активное ожидание
+// ** с периодическими короткими паузами для более точного timing */
+// void	smart_sleep(long long time)
+// {
+// 	long long	start;
+
+// 	start = get_time();
+// 	while (get_time() - start < time)
+// 		usleep(500);
+// }
+
+// /* Проверка смерти философа
+// ** 1. Блокируем мьютекс смерти
+// ** 2. Проверяем флаг общей смерти
+// ** 3. Проверяем время с последнего приема пищи
+// ** 4. Если прошло больше time_to_die:
+// **    - Устанавливаем флаг смерти
+// **    - Выводим сообщение о смерти
+// ** 5. Освобождаем мьютекс */
+// int	check_death(t_philo *philo)
+// {
+// 	pthread_mutex_lock(&philo->data->death_mutex);
+// 	if (philo->data->someone_died)
+// 	{
+// 		pthread_mutex_unlock(&philo->data->death_mutex);
+// 		return (1);
+// 	}
+// 	if (get_time() - philo->last_meal_time > philo->data->time_to_die)
+// 	{
+// 		philo->data->someone_died = 1;
+// 		pthread_mutex_unlock(&philo->data->death_mutex);
+// 		pthread_mutex_lock(&philo->data->print_mutex);
+// 		printf("%lld %d died\n",
+// 			get_time() - philo->data->start_time, philo->id);
+// 		pthread_mutex_unlock(&philo->data->print_mutex);
+// 		return (1);
+// 	}
+// 	pthread_mutex_unlock(&philo->data->death_mutex);
+// 	return (0);
+// }
+
+// /* Освобождение всех ресурсов
+// ** 1. Уничтожаем все мьютексы вилок
+// ** 2. Уничтожаем мьютексы печати и смерти
+// ** 3. Освобождаем выделенную память */
+// void	free_all(t_data *data, t_philo *philos)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < data->num_philos)
+// 	{
+// 		pthread_mutex_destroy(&data->forks[i]);
+// 		i++;
+// 	}
+// 	pthread_mutex_destroy(&data->print_mutex);
+// 	pthread_mutex_destroy(&data->death_mutex);
+// 	free(data->forks);
+// 	free(philos);
+// }
+
+int	ft_atoi(const char *str)
 {
-	int	i;
+	int		in;
+	int		sign;
+	long	num;
 
-	i = 0;
-	while (i < data->num_philos)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->death_mutex);
-	free(data->forks);
-	free(philos);
+	in = 0;
+	sign = 1;
+	num = 0;
+	while ((((str[in] > 8) && (str[in] < 14)) || str[in] == 32) && \
+			str[in] != '\0')
+		in++;
+	if (str[in] == 43 || str[in] == 45)
+		sign = (str[in++] & 2) - 1;
+	if (str[in] < 48 || str[in] > 57)
+		return (0);
+	while ((str[in] > 47) && (str[in] < 58))
+		num = num * 10 + (str[in++] - '0');
+	num = num * sign;
+	if (num > 2147483647)
+		return (-1);
+	if (num < -2147483648)
+		return (0);
+	return ((int)num);
 }
+// void	ft_check_args(void)
+// {
+// 	printf(" ____________________________________________________ \n");
+// 	printf("|            Please enter 4 or 5 arguments           |\n");
+// 	printf("|____________________________________________________|\n");
+// 	printf("|             [1][Number of philosophers]            |\n");
+// 	printf("|             [2][Time to die]                       |\n");
+// 	printf("|             [3][Time to eat]                       |\n");
+// 	printf("|             [4][Time to sleep]                     |\n");
+// 	printf("|             [5][Number of meals]                   |\n");
+// 	printf("|____________________________________________________|\n");
+// }

@@ -6,78 +6,73 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:43 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/27 12:15:44 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/28 17:25:40 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "philos.h"
 
-/* Создание потоков для каждого философа
-** 1. Устанавливаем время начала симуляции
-** 2. Для каждого философа:
-**    - Устанавливаем время последнего приема пищи
-**    - Создаем поток с функцией philo_routine
-** 3. Возвращаем 0 при успехе, 1 при ошибке */
-static int	create_threads(t_philo *philos, t_data *data)
+static int	ft_check_valid(int ac, char **av)
 {
-	int	i;
+	size_t	i;
 
-	i = 0;
-	data->start_time = get_time();
-	while (i < data->num_philos)
+	if (ac < 5 || ac > 6)
 	{
-		philos[i].last_meal = get_time();
-		if (pthread_create(&philos[i].thread, NULL, philo_routine, &philos[i]))
+		ft_check_args();
+		return (1);
+	}
+	i = 1;
+	while (av[i])
+	{
+		if (!ft_is_digit(av[i]) || (!ft_atoi(av[i])))
+		{
+			printf("Invalid argument\n");
 			return (1);
+		}
 		i++;
 	}
 	return (0);
 }
 
-/* Ожидание завершения всех потоков философов
-** Использует pthread_join для каждого потока */
-static void	join_threads(t_philo *philos, t_data *data)
+int	av_processing(t_data *data, int ac, char **av)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_philos)
+	if (ac < 5 || ac > 6)
+		return (error_msg(WRONG_COUNT_OF_ARGS));
+	data->num_philos = ft_atoi(av[1]);
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	data->meals_required = 0;
+	if (data->num_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1 \
+		|| data->time_to_sleep < 1)
+		return (error_msg(WRONG_ARG));
+	if (ac == 6)
 	{
-		pthread_join(philos[i].thread, NULL);
-		i++;
+		data->meals_required = ft_atoi(av[5]);
+		if (data->meals_required < 1)
+			return (error_msg(WRONG_ARG));
 	}
+	return (0);
 }
 
-/* Основная функция
-** 1. Проверка количества аргументов
-** 2. Инициализация данных, мьютексов и философов
-** 3. Создание потоков
-** 4. Ожидание завершения потоков
-** 5. Освобождение ресурсов */
-int	main(int ac, char **av)
+int	main(int argc, char **argv)
 {
-	t_data	data;
-	t_philo	*philos;
+	t_data	*data;
 
-	if (ac != 5 && ac != 6)
+	data = (t_data *)malloc(sizeof(t_data));
+	if (!data)
+		return (error_msg(MALLOC_ERROR));
+	if (argv_processing(data, argc, argv) != 0)
 	{
-		printf("Error: wrong number of arguments\n");
+		free(data);
 		return (1);
 	}
-	if (init_data(&data, ac, av) || init_mutexes(&data)
-		|| init_philos(&philos, &data))
+	if (philosophers(data) != 0)
 	{
-		printf("Error: initialization failed\n");
+		free(data);
 		return (1);
 	}
-	if (create_threads(philos, &data))
-	{
-		printf("Error: thread creation failed\n");
-		free_all(&data, philos);
-		return (1);
-	}
-	join_threads(philos, &data);
-	free_all(&data, philos);
+	free(data);
 	return (0);
 }

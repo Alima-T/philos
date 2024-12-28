@@ -6,9 +6,12 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/27 12:17:16 by aokhapki         ###   ########.fr       */
+/*   Updated: 2024/12/28 17:19:23 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef PHILO_H
+# define PHILO_H
 
 #include <stdio.h>      // for printf
 #include <stdlib.h>     // for malloc, free
@@ -17,16 +20,43 @@
 #include <sys/time.h>   // for gettimeofday
 #include <pthread.h>    // for pthread_create, pthread_detach, pthread_join, pthread_mutex_init, pthread_mutex_destroy, pthread_mutex_lock, pthread_mutex_unlock
 
+# define WRONG_COUNT_OF_ARGS	-1
+# define WRONG_ARG				-2
+# define MALLOC_ERROR			-3
+# define PTHREAD_ERROR			-4
+
+# define LEFT_FORK_TAKEN		1
+# define RIGHT_FORK_TAKEN		2
+# define EATING					3
+# define SLEEPING				4
+# define THINKING				5
+# define DIED					6
+
+
+typedef struct s_data
+{
+	int				num_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				meals_required;
+	int				creation_time;
+	pthread_mutex_t*print_mutex;
+}			t_data;
+
+
 typedef struct s_philo
 {
 	int				id;              /* Номер философа */
 	int				meals_eaten;     /* Кол-во приемов пищи */
+	int				is_full;		/* */
 	long long		last_meal;  	/* Время последнего приема пищи */
 	t_data			*data;           /* Указатель на общие данные */
 	pthread_t		thread;          /* Идентификатор потока философа */
 	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
 	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
-}	t_philo;
+}				t_philo;
+
 
 /* Функции инициализации (init.c) */
 int			init_data(t_data *data, int ac, char **av);
