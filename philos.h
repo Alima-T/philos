@@ -6,7 +6,7 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/01 18:50:58 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/01 21:33:20 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ long long	get_time(void);              /* Получение текущего в
 int			error_msg(int err_num);
 void		philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex);
 int			ft_atoi(const char *str);
-int			check_death(t_philo *philo);  /* Проверка смерти */
-void		free_all(t_data *data, t_philo *philos); /* Освобождение памяти */
 
 /* Функции действий философов (actions.c) */
 void		eat_or_sleep(long time);
@@ -78,8 +76,15 @@ void		eat(t_philo *philos);
 void		sleep_think(t_philo *philo); 
 void		take_forks(t_philo *philos);
 void		*philo_routine(void *arg);  /* Основной цикл философа */
+
 /* philo.c */
-static int	ft_check_valid(int ac, char **av);
 int			main(int ac, char **av);
+
+/* checkers.c  */
+
+int			check_eat(t_philo *philos);
+int			check_death(t_philo *philos, int i);
+void		*check_philo_routine(void *philos_void);
+int			philo_checker(t_philo *philos);
 
 #endif
