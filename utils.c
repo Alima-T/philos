@@ -6,7 +6,7 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by alima             #+#    #+#             */
-/*   Updated: 2025/01/01 23:15:19 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/01 23:17:24 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ long long	get_time(void)
 int	error_msg(int err_num)
 {
 	if (err_num == WRONG_COUNT_OF_ARGS)
-		printf("you passed the wrong number of arguments\n");
+		printf("wrong number of arguments\n");
 	else if (err_num == WRONG_ARG)
-		printf("you passed the wrong argument\n");
+		printf("wrong argument\n");
 	else if (err_num == MALLOC_ERROR)
 		printf("malloc error\n");
 	else if (err_num == PTHREAD_ERROR)
