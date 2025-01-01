@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/28 17:29:21 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/01 23:14:46 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philos.h"
+#include "philo.h"
 
 /* Функция приема пищи философом
 ** 1. Блокируем левую вилку
@@ -51,7 +51,6 @@ void	eat(t_philo *philos)
 	}
 }
 
-
 void	sleep_think(t_philo *philos)
 {
 	philos_msg(SLEEPING, get_time() - philos->data->creation_time, \
@@ -62,12 +61,6 @@ void	sleep_think(t_philo *philos)
 ** 1. Выводим сообщение о начале сна
 ** 2. Спим time_to_sleep миллисекунд
 ** 3. Выводим сообщение о начале размышлений */
-// void	sleep_think(t_philo *philo)
-// {
-// 	print_status(philo, "is sleeping");
-// 	smart_sleep(philo->data->time_to_sleep);
-// 	print_status(philo, "is thinking");
-// }
 
 void	take_forks(t_philo *philos)
 {
@@ -105,20 +98,3 @@ void	*philo_routine(void *arg)
 	}
 	return (NULL);
 }
-// void	*philo_routine(void *arg)
-// {
-// 	t_philo	*philo;
-
-// 	philo = (t_philo *)arg;
-// 	if (philo->id % 2 == 0)
-// 		usleep(1000);
-// 	while (!check_death(philo))
-// 	{
-// 		if (philo->data->meals_required != -1
-// 			&& philo->meals_eaten >= philo->data->meals_required)
-// 			break ;
-// 		eat(philo);
-// 		sleep_think(philo);
-// 	}
-// 	return (NULL);
-// }

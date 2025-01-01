@@ -6,11 +6,11 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:43 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/01 19:49:21 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/01 23:15:02 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philos.h"
+#include "philo.h"
 
 int	main(int ac, char **av)
 {

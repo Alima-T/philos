@@ -6,7 +6,7 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/01 21:33:20 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/01 23:07:59 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_philo
 	int				id;              /* Номер философа */
 	int				meals_eaten;     /* Кол-во приемов пищи */
 	int				is_full;		/* */
-	long long		last_meal;  	/* Время последнего приема пищи */
+	long 			last_meal;  	/* Время последнего приема пищи */
 	t_data			*data;           /* Указатель на общие данные */
 	pthread_t		thread;          /* Идентификатор потока философа */
 	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
@@ -76,9 +76,6 @@ void		eat(t_philo *philos);
 void		sleep_think(t_philo *philo); 
 void		take_forks(t_philo *philos);
 void		*philo_routine(void *arg);  /* Основной цикл философа */
-
-/* philo.c */
-int			main(int ac, char **av);
 
 /* checkers.c  */
 

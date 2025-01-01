@@ -6,11 +6,11 @@
 #    By: alima <alima@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/02 15:41:20 by aokhapki          #+#    #+#              #
-#    Updated: 2025/01/01 21:38:21 by alima            ###   ########.fr        #
+#    Updated: 2025/01/01 23:13:59 by alima            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME			= philos
+NAME			= philo
 CC				= gcc
 CFLAGS			= -Wall -Wextra -Werror -pthread
 #INCLUDE			= -lpthread: Links the pthread library, making the pthread functions available during the linking stage. 
