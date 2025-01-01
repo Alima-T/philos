@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philos.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/28 17:19:23 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/01 18:00:43 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # define THINKING				5
 # define DIED					6
 
-
 typedef struct s_data
 {
 	int				num_philos;
@@ -41,7 +40,7 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				meals_required;
 	int				creation_time;
-	pthread_mutex_t*print_mutex;
+	pthread_mutex_t	*print_mutex;
 }			t_data;
 
 
@@ -59,9 +58,9 @@ typedef struct s_philo
 
 
 /* Функции инициализации (init.c) */
-int			init_data(t_data *data, int ac, char **av);
+int			init_av_data(t_data *data, int ac, char **av);
 int			init_mutexes(t_data *data);
-int			init_philos(t_philo **philos, t_data *data);
+void		init_philos(t_philo *philos, t_data *data, pthread_mutex_t *fork);
 
 /* Вспомогательные функции (utils.c) */
 long long	get_time(void);              /* Получение текущего времени */

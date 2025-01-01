@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:43 by aokhapki          #+#    #+#             */
-/*   Updated: 2024/12/28 17:25:40 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/01 17:59:14 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,6 @@ static int	ft_check_valid(int ac, char **av)
 			return (1);
 		}
 		i++;
-	}
-	return (0);
-}
-
-int	av_processing(t_data *data, int ac, char **av)
-{
-	if (ac < 5 || ac > 6)
-		return (error_msg(WRONG_COUNT_OF_ARGS));
-	data->num_philos = ft_atoi(av[1]);
-	data->time_to_die = ft_atoi(av[2]);
-	data->time_to_eat = ft_atoi(av[3]);
-	data->time_to_sleep = ft_atoi(av[4]);
-	data->meals_required = 0;
-	if (data->num_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1 \
-		|| data->time_to_sleep < 1)
-		return (error_msg(WRONG_ARG));
-	if (ac == 6)
-	{
-		data->meals_required = ft_atoi(av[5]);
-		if (data->meals_required < 1)
-			return (error_msg(WRONG_ARG));
 	}
 	return (0);
 }
