@@ -6,34 +6,11 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:43 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/01 18:50:42 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/01 19:49:21 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philos.h"
-
-static int	ft_check_valid(int ac, char **av)
-{
-	size_t	i;
-
-	if (ac < 5 || ac > 6)
-	{
-		ft_check_args();
-		return (1);
-	}
-	i = 1;
-	while (av[i])
-	{
-		if (!ft_is_digit(av[i]) || (!ft_atoi(av[i])))
-		{
-			printf("Invalid argument\n");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
 
 int	main(int ac, char **av)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by alima             #+#    #+#             */
-/*   Updated: 2024/12/28 17:11:46 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/01 19:44:49 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,68 +56,6 @@ void	philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex)
 	}
 	pthread_mutex_unlock(print_mutex);
 }
-
-// /* Умная задержка с периодической проверкой
-// ** Вместо простого usleep используем активное ожидание
-// ** с периодическими короткими паузами для более точного timing */
-// void	smart_sleep(long long time)
-// {
-// 	long long	start;
-
-// 	start = get_time();
-// 	while (get_time() - start < time)
-// 		usleep(500);
-// }
-
-// /* Проверка смерти философа
-// ** 1. Блокируем мьютекс смерти
-// ** 2. Проверяем флаг общей смерти
-// ** 3. Проверяем время с последнего приема пищи
-// ** 4. Если прошло больше time_to_die:
-// **    - Устанавливаем флаг смерти
-// **    - Выводим сообщение о смерти
-// ** 5. Освобождаем мьютекс */
-// int	check_death(t_philo *philo)
-// {
-// 	pthread_mutex_lock(&philo->data->death_mutex);
-// 	if (philo->data->someone_died)
-// 	{
-// 		pthread_mutex_unlock(&philo->data->death_mutex);
-// 		return (1);
-// 	}
-// 	if (get_time() - philo->last_meal_time > philo->data->time_to_die)
-// 	{
-// 		philo->data->someone_died = 1;
-// 		pthread_mutex_unlock(&philo->data->death_mutex);
-// 		pthread_mutex_lock(&philo->data->print_mutex);
-// 		printf("%lld %d died\n",
-// 			get_time() - philo->data->start_time, philo->id);
-// 		pthread_mutex_unlock(&philo->data->print_mutex);
-// 		return (1);
-// 	}
-// 	pthread_mutex_unlock(&philo->data->death_mutex);
-// 	return (0);
-// }
-
-// /* Освобождение всех ресурсов
-// ** 1. Уничтожаем все мьютексы вилок
-// ** 2. Уничтожаем мьютексы печати и смерти
-// ** 3. Освобождаем выделенную память */
-// void	free_all(t_data *data, t_philo *philos)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < data->num_philos)
-// 	{
-// 		pthread_mutex_destroy(&data->forks[i]);
-// 		i++;
-// 	}
-// 	pthread_mutex_destroy(&data->print_mutex);
-// 	pthread_mutex_destroy(&data->death_mutex);
-// 	free(data->forks);
-// 	free(philos);
-// }
 
 int	ft_atoi(const char *str)
 {
