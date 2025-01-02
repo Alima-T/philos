@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by alima             #+#    #+#             */
-/*   Updated: 2025/01/01 23:17:24 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/02 12:27:25 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 /* Получение текущего времени в миллисекундах
 ** Использует gettimeofday для получения времени с начала эпохи
 ** Конвертирует секунды и микросекунды в миллисекунды */
-long long	get_time(void)
+long	get_time(void)
 {
-	struct timeval	tv;
+	struct timeval	time;
 
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 int	error_msg(int err_num)

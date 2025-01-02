@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philos.h                                           :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/01 23:07:59 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/02 12:27:37 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int			run_threads(t_philo *philos, t_data *data);
 int 		start_sim(t_data *data);
 
 /* Вспомогательные функции (utils.c) */
-long long	get_time(void);              /* Получение текущего времени */
+long		get_time(void);              /* Получение текущего времени */
 int			error_msg(int err_num);
 void		philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex);
 int			ft_atoi(const char *str);
