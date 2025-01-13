@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/02 12:27:37 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/13 21:00:05 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@
 typedef struct s_data
 {
 	int				num_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
 	int				meals_required;
-	int				creation_time;
+	u_int64_t		time_to_die;
+	u_int64_t		time_to_eat;
+	u_int64_t		time_to_sleep;
+	u_int64_t		creation_time;
 	pthread_mutex_t	*print_mutex;
 }			t_data;
 
@@ -48,9 +48,9 @@ typedef struct s_philo
 {
 	int				id;              /* Номер философа */
 	int				meals_eaten;     /* Кол-во приемов пищи */
-	int				is_full;		/* */
-	long 			last_meal;  	/* Время последнего приема пищи */
+	int				is_full;		 /* Индикатор "сыт" */
 	t_data			*data;           /* Указатель на общие данные */
+	u_int64_t 		last_meal;  	 /* Время последнего приема пищи */
 	pthread_t		thread;          /* Идентификатор потока философа */
 	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
 	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
@@ -65,7 +65,7 @@ int			run_threads(t_philo *philos, t_data *data);
 int 		start_sim(t_data *data);
 
 /* Вспомогательные функции (utils.c) */
-long		get_time(void);              /* Получение текущего времени */
+u_int64_t	get_time(void);              /* Получение текущего времени */
 int			error_msg(int err_num);
 void		philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex);
 int			ft_atoi(const char *str);

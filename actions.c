@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/02 12:13:20 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/13 22:16:01 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	*philo_routine(void *arg)
 	philos->last_meal = get_time();
 	philos->meals_eaten = 0;
 	if (!(philos->id % 2))
-		usleep(100);
+		usleep(1000);
 	while (1)
 	{
 		take_forks(philos);
