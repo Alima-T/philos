@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/01 19:25:55 by alima             #+#    #+#             */
-/*   Updated: 2025/01/02 12:41:15 by aokhapki         ###   ########.fr       */
+/*   Created: 2025/01/01 19:25:55 by aokhapki          #+#    #+#             */
+/*   Updated: 2025/01/14 20:45:49 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@
 int	check_eat(t_philo *philos)
 {
 	int	i;
-	int	total_full; // Счетчик для кол. сытых философов
 
+	int total_full; // Счетчик для кол. сытых философов
 	i = 0;
 	total_full = 0;
 	while (i < philos[0].data->num_philos)
 	{
-		total_full = total_full + philos[i].is_full;// Суммируем количество сытых философов
+		total_full = total_full + philos[i].is_full; // Суммируем количество сытых философов
 		i++;
 	}
-	if (total_full >= philos[0].data->num_philos) // Если все философы сыты, возвращаем 1, иначе 0
+	if (total_full >= philos[0].data->num_philos) // Если все философы сыты, 1, иначе 0
 		return (1);
 	return (0);
 }
@@ -39,12 +39,13 @@ int	check_eat(t_philo *philos)
  * @return: 1 если философ умер, 0 если жив
  */
 int	check_death(t_philo *philos, int i)
-{// Проверяем, прошло ли время с последнего приема пищи больше, чем время на жизнь
+{
+ // Проверяем, прошло ли время с последнего приема пищи больше, чем время на жизнь
 	if ((get_time() - philos[i].last_meal) > philos[i].data->time_to_die)
 	{
-		philos_msg(DIED, get_time() - philos[i].data->creation_time, \
-					philos[i].id, philos[0].data->print_mutex);
-		return (1); //1, если философ умер
+		philos_msg(DIED, get_time() - philos[i].data->creation_time,
+			philos[i].id, philos[0].data->print_mutex);
+		return (1); // 1, если философ умер
 	}
 	return (0);
 }
@@ -60,21 +61,23 @@ void	*check_philo_routine(void *philos_void)
 	t_philo	*philos;
 
 	i = 0;
-	philos = (t_philo *)philos_void; // Приведение типа указателя к массиву философов
-	while (1) // Бесконечный цикл
+	philos = (t_philo *)philos_void;
+		// Приведение типа указателя к массиву философов
+	while (1)                        // Бесконечный цикл
 	{
-		if (i >= philos[0].data->num_philos) // Если индекс превышает количество философов
-			i = 0; // Сбрасываем индекс на 0
+		if (i >= philos[0].data->num_philos)   
+			// Если индекс превышает количество философов
+			i = 0;                              // Сбрасываем индекс на 0
 		if (philos[0].data->meals_required > 0) // Если философы должны есть
 		{
 			if (check_eat(philos) == 1) // Проверяем, все ли философы сыты
-				return (NULL); // Если да, завершаем выполнение
+				return (NULL);          // Если да, завершаем выполнение
 		}
 		// Используем функцию для проверки смерти философа
 		if (check_death(philos, i) == 1) // Проверяем, не умер ли текущий философ
-			return ((void *) 1); // Если умер, завершаем выполнение
-		i++; // Переходим к следующему философу
-		usleep(200); // Задержка на 100 микросекунд
+			return ((void *)1);          // Если умер, завершаем выполнение
+		i++;                             // Переходим к следующему философу
+		usleep(200);                     // Задержка на 100 микросекунд
 	}
 	return (NULL); // Возвращаем NULL, если функция завершилась
 }
@@ -88,9 +91,12 @@ int	philo_checker(t_philo *philos)
 	pthread_t	checker;
 
 	// Создаем новый поток, который выполняет функцию check_philo_routine
-	if (pthread_create(&checker, NULL, check_philo_routine, (void *)philos) != 0)
-		return (error_msg(PTHREAD_ERROR)); // Обработка ошибки при создании потока
-	if (pthread_join(checker, NULL) != 0)// Ожидаем завершения потока
-		return (error_msg(PTHREAD_ERROR)); // Обработка ошибки при ожидании потока
+	if (pthread_create(&checker, NULL, check_philo_routine,
+			(void *)philos) != 0)
+		return (error_msg(PTHREAD_ERROR));
+			// Обработка ошибки при создании потока
+	if (pthread_join(checker, NULL) != 0)  // Ожидаем завершения потока
+		return (error_msg(PTHREAD_ERROR));
+			// Обработка ошибки при ожидании потока
 	return (0);
 }

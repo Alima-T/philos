@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/02 12:27:37 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:30:27 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_philo
 	pthread_t		thread;          /* Идентификатор потока философа */
 	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
 	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
+	pthread_mutex_t			philo_mutex;
 }				t_philo;
 
 

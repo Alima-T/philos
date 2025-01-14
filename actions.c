@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/02 12:13:20 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/14 20:44:02 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	eat_or_sleep(long time)
 }
 void	eat(t_philo *philos)
 {
-	philos_msg(EATING, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(EATING, get_time() - philos->data->creation_time, philos->id,
+		philos->data->print_mutex);
 	philos->last_meal = get_time();
 	eat_or_sleep(philos->data->time_to_eat);
 	pthread_mutex_unlock(philos->left_fork);
@@ -51,11 +51,10 @@ void	eat(t_philo *philos)
 	}
 }
 
-
 void	sleep_think(t_philo *philos)
 {
-	philos_msg(SLEEPING, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(SLEEPING, get_time() - philos->data->creation_time, philos->id,
+		philos->data->print_mutex);
 	eat_or_sleep(philos->data->time_to_sleep);
 }
 /* Функция сна и размышления философа
@@ -72,11 +71,11 @@ void	sleep_think(t_philo *philos)
 void	take_forks(t_philo *philos)
 {
 	pthread_mutex_lock(philos->left_fork);
-	philos_msg(LEFT_FORK_TAKEN, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(LEFT_FORK_TAKEN, get_time() - philos->data->creation_time,
+		philos->id, philos->data->print_mutex);
 	pthread_mutex_lock(philos->right_fork);
-	philos_msg(RIGHT_FORK_TAKEN, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(RIGHT_FORK_TAKEN, get_time() - philos->data->creation_time,
+		philos->id, philos->data->print_mutex);
 }
 /* Основная функция потока философа
 ** 1. Приводим void* к t_philo*
@@ -93,15 +92,15 @@ void	*philo_routine(void *arg)
 	philos = (t_philo *)arg;
 	philos->last_meal = get_time();
 	philos->meals_eaten = 0;
-	if (!(philos->id % 2))
+	if (!(philos->id % 2)) // first Even-ID Philosophers (P0, P2)
 		usleep(100);
 	while (1)
 	{
 		take_forks(philos);
 		eat(philos);
 		sleep_think(philos);
-		philos_msg(THINKING, get_time() - philos->data->creation_time, philos->id, \
-					philos->data->print_mutex);
+		philos_msg(THINKING, get_time() - philos->data->creation_time,
+			philos->id, philos->data->print_mutex);
 	}
 	return (NULL);
 }

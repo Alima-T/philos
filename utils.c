@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/26 19:08:34 by alima             #+#    #+#             */
-/*   Updated: 2025/01/02 12:27:25 by aokhapki         ###   ########.fr       */
+/*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
+/*   Updated: 2025/01/14 20:45:26 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,19 @@
 /* Получение текущего времени в миллисекундах
 ** Использует gettimeofday для получения времени с начала эпохи
 ** Конвертирует секунды и микросекунды в миллисекунды */
+
 long	get_time(void)
 {
 	struct timeval	time;
+	long			sec;
+	long			microsec;
+	long			millisec;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	(gettimeofday(&time, NULL));
+	sec = time.tv_sec;
+	microsec = time.tv_usec;
+	millisec = (sec * 1000) + (microsec / 1000);
+	return (millisec);
 }
 
 int	error_msg(int err_num)
@@ -36,7 +43,8 @@ int	error_msg(int err_num)
 	return (1);
 }
 
-void	philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex)
+void	philos_msg(int msg_code, long time, int id,
+		pthread_mutex_t *print_mutex)
 {
 	pthread_mutex_lock(print_mutex);
 	if (msg_code == LEFT_FORK_TAKEN)
@@ -66,8 +74,8 @@ int	ft_atoi(const char *str)
 	in = 0;
 	sign = 1;
 	num = 0;
-	while ((((str[in] > 8) && (str[in] < 14)) || str[in] == 32) && \
-			str[in] != '\0')
+	while ((((str[in] > 8) && (str[in] < 14)) || str[in] == 32)
+		&& str[in] != '\0')
 		in++;
 	if (str[in] == 43 || str[in] == 45)
 		sign = (str[in++] & 2) - 1;
