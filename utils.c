@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/16 13:03:43 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/16 15:38:11 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 /* Получение текущего времени в миллисекундах
 ** Использует gettimeofday для получения времени с начала эпохи
 ** Конвертирует секунды и микросекунды в миллисекунды */
-
-
 
 int ft_usleep(u_int64_t milliseconds)
 {
@@ -59,18 +57,18 @@ void	philos_msg(int msg_code, u_int64_t time, int id,
 {
 	pthread_mutex_lock(print_mutex);
 	if (msg_code == LEFT_FORK_TAKEN)
-		printf("%llu %d has taken a fork\n", time, id);
+		printf("%lu %d has taken a fork\n", time, id);
 	else if (msg_code == RIGHT_FORK_TAKEN)
-		printf("%llu %d has taken a fork\n", time, id);
+		printf("%lu %d has taken a fork\n", time, id);
 	else if (msg_code == EATING)
-		printf("%llu %d is eating\n", time, id);
+		printf("%lu %d is eating\n", time, id);
 	else if (msg_code == SLEEPING)
-		printf("%llu %d is sleeping\n", time, id);
+		printf("%lu %d is sleeping\n", time, id);
 	else if (msg_code == THINKING)
-		printf("%llu %d is thinking\n", time, id);
+		printf("%lu %d is thinking\n", time, id);
 	else if (msg_code == DIED)
 	{
-		printf("%llu %d died\n", time, id);
+		printf("%lu %d died\n", time, id);
 		return ;
 	}
 	pthread_mutex_unlock(print_mutex);
