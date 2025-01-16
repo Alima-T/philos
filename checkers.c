@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 19:25:55 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/14 20:45:49 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:33:26 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	check_eat(t_philo *philos)
 int	check_death(t_philo *philos, int i)
 {
  // Проверяем, прошло ли время с последнего приема пищи больше, чем время на жизнь
-	if ((get_time() - philos[i].last_meal) > philos[i].data->time_to_die)
+	if ((get_time() - philos[i].last_meal) > ((philos[i].data->time_to_die)- 1)) // -1 to make difference 10 ms
 	{
 		philos_msg(DIED, get_time() - philos[i].data->creation_time,
 			philos[i].id, philos[0].data->print_mutex);
@@ -76,8 +76,9 @@ void	*check_philo_routine(void *philos_void)
 		// Используем функцию для проверки смерти философа
 		if (check_death(philos, i) == 1) // Проверяем, не умер ли текущий философ
 			return ((void *)1);          // Если умер, завершаем выполнение
+			// break;
 		i++;                             // Переходим к следующему философу
-		usleep(200);                     // Задержка на 100 микросекунд
+		usleep(100);                     // Задержка на 100 микросекунд
 	}
 	return (NULL); // Возвращаем NULL, если функция завершилась
 }

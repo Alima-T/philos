@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/10 16:30:27 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:23:01 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@
 typedef struct s_data
 {
 	int				num_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
 	int				meals_required;
-	int				creation_time;
+	u_int64_t		time_to_die;
+	u_int64_t		time_to_eat;
+	u_int64_t		time_to_sleep;
+	u_int64_t		creation_time;
 	pthread_mutex_t	*print_mutex;
 }			t_data;
 
@@ -49,12 +49,12 @@ typedef struct s_philo
 	int				id;              /* Номер философа */
 	int				meals_eaten;     /* Кол-во приемов пищи */
 	int				is_full;		/* */
-	long 			last_meal;  	/* Время последнего приема пищи */
+	u_int64_t 		last_meal;    	/* Время последнего приема пищи */
 	t_data			*data;           /* Указатель на общие данные */
 	pthread_t		thread;          /* Идентификатор потока философа */
 	pthread_mutex_t	*left_fork;      /* Указатель на левую вилку */
 	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
-	pthread_mutex_t			philo_mutex;
+	pthread_mutex_t	philo_mutex;
 }				t_philo;
 
 
@@ -66,13 +66,14 @@ int			run_threads(t_philo *philos, t_data *data);
 int 		start_sim(t_data *data);
 
 /* Вспомогательные функции (utils.c) */
-long		get_time(void);              /* Получение текущего времени */
+int ft_usleep(u_int64_t milliseconds);
+u_int64_t	get_time(void);              /* Получение текущего времени */
 int			error_msg(int err_num);
-void		philos_msg(int msg_code, long time, int id, pthread_mutex_t *print_mutex);
+void		philos_msg(int msg_code, u_int64_t time, int id, pthread_mutex_t *print_mutex);
 int			ft_atoi(const char *str);
 
 /* Функции действий философов (actions.c) */
-void		eat_or_sleep(long time);
+void		eat_or_sleep(u_int64_t time);
 void		eat(t_philo *philos);
 void		sleep_think(t_philo *philo); 
 void		take_forks(t_philo *philos);

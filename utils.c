@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/14 20:45:26 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:03:43 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,23 @@
 ** Использует gettimeofday для получения времени с начала эпохи
 ** Конвертирует секунды и микросекунды в миллисекунды */
 
-long	get_time(void)
+
+
+int ft_usleep(u_int64_t milliseconds)
+{
+	u_int64_t start;
+	
+	start = get_time();
+	while((get_time() - start) < milliseconds)
+		usleep(500);
+	return (0);
+}
+u_int64_t	get_time(void)
 {
 	struct timeval	time;
-	long			sec;
-	long			microsec;
-	long			millisec;
+	u_int64_t			sec;
+	u_int64_t			microsec;
+	u_int64_t			millisec;
 
 	(gettimeofday(&time, NULL));
 	sec = time.tv_sec;
@@ -43,23 +54,23 @@ int	error_msg(int err_num)
 	return (1);
 }
 
-void	philos_msg(int msg_code, long time, int id,
+void	philos_msg(int msg_code, u_int64_t time, int id,
 		pthread_mutex_t *print_mutex)
 {
 	pthread_mutex_lock(print_mutex);
 	if (msg_code == LEFT_FORK_TAKEN)
-		printf("%ld %d has taken a fork\n", time, id);
+		printf("%llu %d has taken a fork\n", time, id);
 	else if (msg_code == RIGHT_FORK_TAKEN)
-		printf("%ld %d has taken a fork\n", time, id);
+		printf("%llu %d has taken a fork\n", time, id);
 	else if (msg_code == EATING)
-		printf("%ld %d is eating\n", time, id);
+		printf("%llu %d is eating\n", time, id);
 	else if (msg_code == SLEEPING)
-		printf("%ld %d is sleeping\n", time, id);
+		printf("%llu %d is sleeping\n", time, id);
 	else if (msg_code == THINKING)
-		printf("%ld %d is thinking\n", time, id);
+		printf("%llu %d is thinking\n", time, id);
 	else if (msg_code == DIED)
 	{
-		printf("%ld %d died\n", time, id);
+		printf("%llu %d died\n", time, id);
 		return ;
 	}
 	pthread_mutex_unlock(print_mutex);

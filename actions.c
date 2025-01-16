@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/14 20:44:02 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:26:44 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@
 ** 7. Ждем time_to_eat миллисекунд
 ** 8. Освобождаем вилки */
 
-void	eat_or_sleep(long time)
+void	eat_or_sleep(u_int64_t time)
 {
-	long	start;
-	long	stop;
+	u_int64_t	start;
+	u_int64_t	stop;
 
 	start = get_time();
 	stop = start + time;
 	while (stop > start)
 	{
-		usleep(50);
+		usleep(1000);
 		start = get_time();
 	}
 }
