@@ -6,34 +6,31 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/14 20:43:50 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/19 20:48:40 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /* Инициализация основных данных программы */
-
 int	init_av_data(t_data *data, int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 		return (error_msg(WRONG_COUNT_OF_ARGS)); 
-	data->num_philos = ft_atoi(av[1]);    // Количество философов
-	data->time_to_die = ft_atoi(av[2]);   // Время до смерти без еды
-	data->time_to_eat = ft_atoi(av[3]);   // Время на прием пищи
-	data->time_to_sleep = ft_atoi(av[4]); // Время на сон
-	data->meals_required = 0;            
-		// Изначально количество обязательных приемов пищи равно 0
-	// Проверяем, что все значения положительные
+	data->num_philos = ft_atoi(av[1]);    // philos num
+	data->time_to_die = ft_atoi(av[2]);   // tm to die
+	data->time_to_eat = ft_atoi(av[3]);   // tm to eat
+	data->time_to_sleep = ft_atoi(av[4]); // tm to sleep
+	data->meals_required = 0; // option - count of required meal, by default = 0
+	// check if all arguments more than 0
 	if (data->num_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1
 		|| data->time_to_sleep < 1)
 		return (error_msg(WRONG_ARG));
-	// Если передан шестой аргумент (количество приемов пищи), обрабатываем его
+	// send and check 6th arg (required meal) optionally
 	if (ac == 6)
 	{
-		data->meals_required = ft_atoi(av[5]);
-			// Количество обязательных приемов пищи
-		if (data->meals_required < 1) // Проверяем,	что значение корректно
+		data->meals_required = ft_atoi(av[5]);// option - count of required meal
+		if (data->meals_required < 1) // check that it is more than 0
 			return (error_msg(WRONG_ARG)); 
 	}
 	return (0); // Возвращаем 0, если все корректнo
@@ -93,25 +90,32 @@ int	run_threads(t_philo *philos, t_data *data)
 	while (i < data->num_philos)
 	{
 		if (pthread_create(&philo_threads[i], NULL, philo_routine,
-				(void *)&philos[i]) != 0) // Создаем поток для каждого философа
-			return (error_msg(PTHREAD_ERROR));                                              
-				// Выводим ошибку, если поток не создан
+				(void *)&philos[i]) != 0) // create thread for each philo
+				return (error_msg(PTHREAD_ERROR)); // Выводим ошибку,поток не создан
 		i++;
 	}
-	i = 0;
+	// Detaches each philosopher thread to allow resources to be freed automatically when the thread exits; 
+	i = 0; // doesn't change anythig with or without this code
 	while (i < data->num_philos)
 	{
-		if (pthread_detach(philo_threads[i]) != 0) // Отсоединяем поток, чтобы он завершался сам
-			return (error_msg(PTHREAD_ERROR));     // Выводим ошибку, если отсоединение не удалось
+		if (pthread_detach(philo_threads[i]) != 0)
+			return (error_msg(PTHREAD_ERROR));//returns an error message if pthread_detach fails.
 		i++;
 	}
 	if (philo_checker(philos) != 0)
-		// Проверяем состояние философов (функция philo_checker)
-		return (1);                 // Возвращаем 1, если обнаружена ошибка
+		return (1);//  1 - ошибка
+	// destroy and free
 	destroy_mutex(philos, data);   
-		// Уничтожаем мьютексы и освобождаем память для потоков
 	free(philo_threads);
-	return (0); // Возвращаем 0, если все прошло успешно
+	//****/ with this code we free all allocations but gives more of errors in valgrind. without this code frees always 7 allocations and 2 errors
+	i = 0; 
+	while (i < data->num_philos)
+	{
+		free(&philos[i]);
+		i++;
+	}
+	//****/
+	return (0); //  0 - успешно
 }
 
 int	start_sim(t_data *data)
@@ -129,9 +133,9 @@ int	start_sim(t_data *data)
 	pthread_mutex_init(data->print_mutex, NULL);
 	init_philos(philos, data, fork); // Иниц философов и вилки
 	if (run_threads(philos, data) != 0) // Запускаем симуляцию
-		return (1);// Выходим, ошибка
+		return (1);// 1 - ошибка
 	free(fork);
 	free(data->print_mutex);
 	free(philos);
-	return (0); // Возвращаем 0,  успешно
+	return (0); // 0 - успешно
 }
