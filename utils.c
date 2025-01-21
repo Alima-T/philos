@@ -6,28 +6,26 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/19 19:55:22 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:05:17 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* Получение текущего времени в миллисекундах
-** Использует gettimeofday для получения времени с начала эпохи
-** Конвертирует секунды и микросекунды в миллисекунды */
+/**
+ * [1][Number of philosophers]);
+ * [2][Time to die];
+ * [3][Time to eat];
+ * [4][Time to sleep];
+ * [5][Number of meals].
+ * 1 second = 1000 ms = 1,000,000 microsec
+ * get current time in  ms
+ * gettimeofday get time since the Unix epoch (January 1, 1970)
+*/
 
-int ft_usleep(u_int64_t milliseconds)
-{
-	u_int64_t start;
-	
-	start = get_time();
-	while((get_time() - start) < milliseconds)
-		usleep(500);
-	return (0);
-}
 u_int64_t	get_time(void)
 {
-	struct timeval	time;
+	struct timeval	time;  
 	u_int64_t			sec;
 	u_int64_t			microsec;
 	u_int64_t			millisec;
@@ -38,6 +36,16 @@ u_int64_t	get_time(void)
 	millisec = (sec * 1000) + (microsec / 1000);
 	return (millisec);
 }
+
+// int ft_usleep(u_int64_t milliseconds) //didn't use
+// {
+// 	u_int64_t start;
+	
+// 	start = get_time();
+// 	while((get_time() - start) < milliseconds)
+// 		usleep(500);
+// 	return (0);
+// }
 
 int	error_msg(int err_num)
 {
@@ -51,24 +59,30 @@ int	error_msg(int err_num)
 		printf("pthread error\n");
 	return (1);
 }
-
+// for valgrind lu, for normal run llu
 void	philos_msg(int msg_code, u_int64_t time, int id,
 		pthread_mutex_t *print_mutex)
 {
 	pthread_mutex_lock(print_mutex);
 	if (msg_code == LEFT_FORK_TAKEN)
-		printf("%lu %d has taken a fork\n", time, id);
+		printf("%llu %d has taken a fork\n", time, id);
+		// printf("%lu %d has taken a fork\n", time, id); // lu is for valgrind
 	else if (msg_code == RIGHT_FORK_TAKEN)
-		printf("%lu %d has taken a fork\n", time, id);
+		printf("%llu %d has taken a fork\n", time, id);
+		// printf("%lu %d has taken a fork\n", time, id);
 	else if (msg_code == EATING)
-		printf("%lu %d is eating\n", time, id);
+		printf("%llu %d is eating\n", time, id);
+		// printf("%lu %d is eating\n", time, id);
 	else if (msg_code == SLEEPING)
-		printf("%lu %d is sleeping\n", time, id);
+		printf("%llu %d is sleeping\n", time, id);
+		// printf("%lu %d is sleeping\n", time, id);
 	else if (msg_code == THINKING)
-		printf("%lu %d is thinking\n", time, id);
+		printf("%llu %d is thinking\n", time, id);
+		// printf("%lu %d is thinking\n", time, id);
 	else if (msg_code == DIED)
 	{
-		printf("%lu %d died\n", time, id);
+		printf("%llu %d died\n", time, id);
+		// printf("%lu %d died\n", time, id);
 		return ;
 	}
 	pthread_mutex_unlock(print_mutex);
@@ -99,15 +113,3 @@ int	ft_atoi(const char *str)
 		return (0);
 	return ((int)num);
 }
-// void	ft_check_args(void)
-// {
-// 	printf(" ____________________________________________________ \n");
-// 	printf("|            Please enter 4 or 5 arguments           |\n");
-// 	printf("|____________________________________________________|\n");
-// 	printf("|             [1][Number of philosophers]            |\n");
-// 	printf("|             [2][Time to die]                       |\n");
-// 	printf("|             [3][Time to eat]                       |\n");
-// 	printf("|             [4][Time to sleep]                     |\n");
-// 	printf("|             [5][Number of meals]                   |\n");
-// 	printf("|____________________________________________________|\n");
-// }

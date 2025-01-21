@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/16 13:23:01 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:58:50 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_philo
 	pthread_mutex_t	*right_fork;     /* Указатель на правую вилку */
 	pthread_mutex_t	philo_mutex;
 }				t_philo;
-
 
 /* Функции инициализации (init.c) */
 int			init_av_data(t_data *data, int ac, char **av);

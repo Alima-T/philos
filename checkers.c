@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 19:25:55 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/19 20:45:59 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:42:51 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ int	check_eat(t_philo *philos)
 {
 	int	i;
 
-	int total_full; // Счетчик для кол. сытых философов
+	int total_full;
 	i = 0;
 	total_full = 0;
 	while (i < philos[0].data->num_philos)
 	{
-		total_full = total_full + philos[i].is_full; // sum of not_hungly philos
+		total_full = total_full + philos[i].is_full;	// sum of not_hungly philos
 		i++;
 	}
-	if (total_full >= philos[0].data->num_philos) // if all philos are full =  1, if not = 0
+	if (total_full >= philos[0].data->num_philos)	// if all philos are full =  1, if not = 0
 		return (1);
 	return (0);
 }
@@ -45,7 +45,7 @@ int	check_death(t_philo *philos, int i)
 	{
 		philos_msg(DIED, get_time() - philos[i].data->creation_time,
 			philos[i].id, philos[0].data->print_mutex);
-		return (1); // 1 if dead
+		return (1);				// 1 if dead
 	}
 	return (0);
 }
@@ -67,18 +67,20 @@ void	*check_philo_routine(void *philos_void)
 	{
 		if (i >= philos[0].data->num_philos)   
 			// if index is more than philos number Если индекс превышает количество философов
-			i = 0;// Сбрасываем индекс на 0
-		if (philos[0].data->meals_required > 0) // Если философы должны есть
+			i = 0;
+		if (philos[0].data->meals_required > 0)	// Если философы должны есть
 		{
 			if (check_eat(philos) == 1) // Проверяем, все ли философы сыты
-				return (NULL);          // Если да, завершаем выполнение
+				return (NULL);			// Если да, завершаем выполнение
 		}
 		// Используем функцию для проверки смерти философа
-		if (check_death(philos, i) == 1) // if dead
-			return ((void *)1);          // 1 = dead
-			// break;
+		if (check_death(philos, i) == 1)	// if dead
+		{
+			return ((void *)1);				// 1 = dead
+			break;
+		}	
 		i++;
-		usleep(100);
+		// usleep(100);
 	}
 	return (NULL); // NULL, if function is finished ??
 }

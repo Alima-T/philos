@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/19 20:48:40 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:57:15 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	init_av_data(t_data *data, int ac, char **av)
 		if (data->meals_required < 1) // check that it is more than 0
 			return (error_msg(WRONG_ARG)); 
 	}
-	return (0); // Возвращаем 0, если все корректнo
+	return (0); // success
 }
 
-/* Инициализация структур философов */
+/* init struct of philos */
 void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *fork)
 {
 	int	i;
@@ -45,20 +45,17 @@ void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *fork)
 	while (i < data->num_philos)
 	{
 		pthread_mutex_init(&fork[i], NULL);                      
-			// Инициализируем мьютексы для вилок
 		philos[i].id = i + 1;                                    
-			// Присваиваем философу ID
 		philos[i].left_fork = &fork[i];                          
-			// Указатели на вилки
 		philos[i].right_fork = &fork[(i + 1) % data->num_philos];
 			// Указатели на вилки (циклически)
 		philos[i].data = data;                                   
 			// Привязываем философа к общим данным
 		if (data->meals_required > 0)                            
-			// Если задано количество приемов пищи, инициализируем счетчики
+			// if 6th arg count eaten meal and not_hungry
 		{
-			philos[i].meals_eaten = 0; // Счетчик съеденных приемов пищи
-			philos[i].is_full = 0;     // Индикатор сытости
+			philos[i].meals_eaten = 0;
+			philos[i].is_full = 0;
 		}
 		i++;
 	}
@@ -103,19 +100,19 @@ int	run_threads(t_philo *philos, t_data *data)
 		i++;
 	}
 	if (philo_checker(philos) != 0)
-		return (1);//  1 - ошибка
+		return (1);//  1 - error
 	// destroy and free
-	destroy_mutex(philos, data);   
+	destroy_mutex(philos, data);
 	free(philo_threads);
-	//****/ with this code we free all allocations but gives more of errors in valgrind. without this code frees always 7 allocations and 2 errors
-	i = 0; 
-	while (i < data->num_philos)
-	{
-		free(&philos[i]);
-		i++;
-	}
+	//****/ with this code we free all allocations but gives more errors in valgrind and with normal run. Without this code frees always 7 allocations and 2 errors
+	// i = 0; 
+	// while (i < data->num_philos)
+	// {
+	// 	free(&philos[i]);
+	// 	i++;
+	// }
 	//****/
-	return (0); //  0 - успешно
+	return (0); //  0 - success
 }
 
 int	start_sim(t_data *data)
@@ -133,9 +130,9 @@ int	start_sim(t_data *data)
 	pthread_mutex_init(data->print_mutex, NULL);
 	init_philos(philos, data, fork); // Иниц философов и вилки
 	if (run_threads(philos, data) != 0) // Запускаем симуляцию
-		return (1);// 1 - ошибка
+		return (1);// 1 - error	
 	free(fork);
 	free(data->print_mutex);
 	free(philos);
-	return (0); // 0 - успешно
+	return (0); // 0 - success
 }
