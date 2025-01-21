@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/16 13:26:44 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:24:26 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,8 @@ void	sleep_think(t_philo *philos)
 		philos->data->print_mutex);
 	eat_or_sleep(philos->data->time_to_sleep);
 }
-/* Функция сна и размышления философа
-** 1. Выводим сообщение о начале сна
-** 2. Спим time_to_sleep миллисекунд
-** 3. Выводим сообщение о начале размышлений */
-// void	sleep_think(t_philo *philo)
-// {
-// 	print_status(philo, "is sleeping");
-// 	smart_sleep(philo->data->time_to_sleep);
-// 	print_status(philo, "is thinking");
-// }
+
+
 
 void	take_forks(t_philo *philos)
 {
@@ -93,7 +85,7 @@ void	*philo_routine(void *arg)
 	philos->last_meal = get_time();
 	philos->meals_eaten = 0;
 	if (!(philos->id % 2)) // first Even-ID Philosophers (P0, P2)
-		usleep(100);
+		usleep(100); 
 	while (1)
 	{
 		take_forks(philos);

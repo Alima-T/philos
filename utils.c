@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/21 16:05:17 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:40:40 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,47 @@ int	error_msg(int err_num)
 		printf("pthread error\n");
 	return (1);
 }
-// for valgrind lu, for normal run llu
+
+// void	philos_msg(int msg_code, u_int64_t time, int id,
+// 		pthread_mutex_t *print_mutex)
+// {
+// 	pthread_mutex_lock(print_mutex);
+// 	if (msg_code == LEFT_FORK_TAKEN)
+// 		printf("%llu %d has taken a fork\n", time, id);
+// 	else if (msg_code == RIGHT_FORK_TAKEN)
+// 		printf("%llu %d has taken a fork\n", time, id);
+// 	else if (msg_code == EATING)
+// 		printf("%llu %d is eating\n", time, id);
+// 	else if (msg_code == SLEEPING)
+// 		printf("%llu %d is sleeping\n", time, id);
+// 	else if (msg_code == THINKING)
+// 		printf("%llu %d is thinking\n", time, id);
+// 	else if (msg_code == DIED)
+// 	{
+// 		printf("%llu %d died\n", time, id);
+// 		return ;
+// 	}
+// 	pthread_mutex_unlock(print_mutex);
+// }
+
+// *** for valgrind lu, for normal run llu
 void	philos_msg(int msg_code, u_int64_t time, int id,
 		pthread_mutex_t *print_mutex)
 {
 	pthread_mutex_lock(print_mutex);
 	if (msg_code == LEFT_FORK_TAKEN)
-		printf("%llu %d has taken a fork\n", time, id);
-		// printf("%lu %d has taken a fork\n", time, id); // lu is for valgrind
+		printf("%lu %d has taken a fork\n", time, id); // lu is for valgrind
 	else if (msg_code == RIGHT_FORK_TAKEN)
-		printf("%llu %d has taken a fork\n", time, id);
-		// printf("%lu %d has taken a fork\n", time, id);
+		printf("%lu %d has taken a fork\n", time, id);
 	else if (msg_code == EATING)
-		printf("%llu %d is eating\n", time, id);
-		// printf("%lu %d is eating\n", time, id);
+		printf("%lu %d is eating\n", time, id);
 	else if (msg_code == SLEEPING)
-		printf("%llu %d is sleeping\n", time, id);
-		// printf("%lu %d is sleeping\n", time, id);
+		printf("%lu %d is sleeping\n", time, id);
 	else if (msg_code == THINKING)
-		printf("%llu %d is thinking\n", time, id);
-		// printf("%lu %d is thinking\n", time, id);
+		printf("%lu %d is thinking\n", time, id);
 	else if (msg_code == DIED)
 	{
-		printf("%llu %d died\n", time, id);
-		// printf("%lu %d died\n", time, id);
+		printf("%lu %d died\n", time, id);
 		return ;
 	}
 	pthread_mutex_unlock(print_mutex);

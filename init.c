@@ -6,31 +6,31 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/21 15:57:15 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:45:09 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* Инициализация основных данных программы */
+/* data from input */
 int	init_av_data(t_data *data, int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 		return (error_msg(WRONG_COUNT_OF_ARGS)); 
-	data->num_philos = ft_atoi(av[1]);    // philos num
-	data->time_to_die = ft_atoi(av[2]);   // tm to die
-	data->time_to_eat = ft_atoi(av[3]);   // tm to eat
-	data->time_to_sleep = ft_atoi(av[4]); // tm to sleep
-	data->meals_required = 0; // option - count of required meal, by default = 0
-	// check if all arguments more than 0
+	data->num_philos = ft_atoi(av[1]);
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	data->meals_required = 0; 
+	// (av[5] - option - count of required meal, by default = 0 // check if all arguments more than 0
 	if (data->num_philos < 1 || data->time_to_die < 1 || data->time_to_eat < 1
 		|| data->time_to_sleep < 1)
 		return (error_msg(WRONG_ARG));
-	// send and check 6th arg (required meal) optionally
+	// send and check (av[5])6th arg (required meal) optionally
 	if (ac == 6)
 	{
-		data->meals_required = ft_atoi(av[5]);// option - count of required meal
-		if (data->meals_required < 1) // check that it is more than 0
+		data->meals_required = ft_atoi(av[5]);
+		if (data->meals_required < 1) 
 			return (error_msg(WRONG_ARG)); 
 	}
 	return (0); // success
@@ -60,35 +60,33 @@ void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *fork)
 		i++;
 	}
 }
-
+// destroy mutexes for data_output and left_fork 
 void	destroy_mutex(t_philo *philos, t_data *data)
 {
 	int	i;
 
 	i = 0;
-	pthread_mutex_destroy(data->print_mutex); // Уничтожаем мьютекс для вывода
+	pthread_mutex_destroy(data->print_mutex);
 	while (i < data->num_philos)
 	{
-		pthread_mutex_destroy(philos[i].left_fork); // Уничтожаем мьютекс вилки
+		pthread_mutex_destroy(philos[i].left_fork);
 		i++;
 	}
 }
-
+//fix start_time, allocate mem for array of philo's threads, create thread for each philo 1 - error, 0 - success	
 int	run_threads(t_philo *philos, t_data *data)
 {
 	int			i;
 	pthread_t	*philo_threads;
 
-	data->creation_time = get_time();                            
-		// Фиксируем время начала симуляции
+	data->creation_time = get_time();
 	philo_threads = malloc(sizeof(pthread_t) * data->num_philos);
-		// Выделяем память для массива потоков философов
 	i = 0;
 	while (i < data->num_philos)
 	{
 		if (pthread_create(&philo_threads[i], NULL, philo_routine,
-				(void *)&philos[i]) != 0) // create thread for each philo
-				return (error_msg(PTHREAD_ERROR)); // Выводим ошибку,поток не создан
+				(void *)&philos[i]) != 0)
+				return (error_msg(PTHREAD_ERROR));
 		i++;
 	}
 	// Detaches each philosopher thread to allow resources to be freed automatically when the thread exits; 
@@ -96,12 +94,11 @@ int	run_threads(t_philo *philos, t_data *data)
 	while (i < data->num_philos)
 	{
 		if (pthread_detach(philo_threads[i]) != 0)
-			return (error_msg(PTHREAD_ERROR));//returns an error message if pthread_detach fails.
+			return (error_msg(PTHREAD_ERROR));
 		i++;
 	}
 	if (philo_checker(philos) != 0)
-		return (1);//  1 - error
-	// destroy and free
+		return (1);
 	destroy_mutex(philos, data);
 	free(philo_threads);
 	//****/ with this code we free all allocations but gives more errors in valgrind and with normal run. Without this code frees always 7 allocations and 2 errors
@@ -112,27 +109,27 @@ int	run_threads(t_philo *philos, t_data *data)
 	// 	i++;
 	// }
 	//****/
-	return (0); //  0 - success
+	return (0);
 }
 
+// allocate mem for philos, forks and mutex_for_data_output, 1 - error, 0 - success	
 int	start_sim(t_data *data)
 {
 	t_philo			*philos;
 	pthread_mutex_t	*fork;
 
-	// Выделяем память для философов, вилок и мьютекса вывода
 	philos = (t_philo *)malloc(sizeof(t_philo) * data->num_philos);
 	fork = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
 			* data->num_philos);
 	data->print_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (!philos || !fork || !data->print_mutex)
-		return (error_msg(MALLOC_ERROR)); // ошибкa, память не выделена
+		return (error_msg(MALLOC_ERROR));
 	pthread_mutex_init(data->print_mutex, NULL);
-	init_philos(philos, data, fork); // Иниц философов и вилки
-	if (run_threads(philos, data) != 0) // Запускаем симуляцию
-		return (1);// 1 - error	
+	init_philos(philos, data, fork);
+	if (run_threads(philos, data) != 0)
+		return (1);
 	free(fork);
 	free(data->print_mutex);
 	free(philos);
-	return (0); // 0 - success
+	return (0);
 }

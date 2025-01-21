@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/21 15:58:50 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:47:30 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int			run_threads(t_philo *philos, t_data *data);
 int 		start_sim(t_data *data);
 
 /* Вспомогательные функции (utils.c) */
-int ft_usleep(u_int64_t milliseconds);
-u_int64_t	get_time(void);              /* Получение текущего времени */
+int			ft_usleep(u_int64_t milliseconds); //remove
+u_int64_t	get_time(void);
 int			error_msg(int err_num);
 void		philos_msg(int msg_code, u_int64_t time, int id, pthread_mutex_t *print_mutex);
 int			ft_atoi(const char *str);
@@ -74,9 +74,9 @@ int			ft_atoi(const char *str);
 /* Функции действий философов (actions.c) */
 void		eat_or_sleep(u_int64_t time);
 void		eat(t_philo *philos);
-void		sleep_think(t_philo *philo); 
+void		sleep_think(t_philo *philo);
 void		take_forks(t_philo *philos);
-void		*philo_routine(void *arg);  /* Основной цикл философа */
+void		*philo_routine(void *arg);
 
 /* checkers.c  */
 
