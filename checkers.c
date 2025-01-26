@@ -6,53 +6,55 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 19:25:55 by alima             #+#    #+#             */
-/*   Updated: 2025/01/13 22:15:45 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/26 21:21:09 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* Функция проверяет, все ли философы поели необходимое количество раз
- * @param philos: массив структур философов
- * @return: 1 если все философы поели достаточно, 0 если нет
+/* проверяет, все ли философы поели необходимое количество раз
+ * @param total_full: sum of not_hungly philos
+ * @return: 1 - if all philos are full, 0 - if not
  */
 int	check_eat(t_philo *philos)
 {
 	int	i;
-	int	total_full; // Счетчик для кол. сытых философов
+	int	total_full;
 
 	i = 0;
 	total_full = 0;
 	while (i < philos[0].data->num_philos)
 	{
-		total_full = total_full + philos[i].is_full;// Суммируем количество сытых философов
+		total_full = total_full + philos[i].is_full;
 		i++;
 	}
-	if (total_full >= philos[0].data->num_philos) // Если все философы сыты, возвращаем 1, иначе 0
+	if (total_full >= philos[0].data->num_philos)
 		return (1);
 	return (0);
 }
 
-/* Проверяет, не умер ли философ от голода
+/*
  * @param philos: массив структур философов
  * @param i: индекс проверяемого философа
  * @return: 1 если философ умер, 0 если жив
  */
 int	check_death(t_philo *philos, int i)
-{// Проверяем, прошло ли время с последнего приема пищи больше, чем время на жизнь
-	if ((get_time() - philos[i].last_meal) > philos[i].data->time_to_die)
+{
+	// check if time from last meal is more than time to live
+	if ((get_time() - philos[i].last_meal) >= ((philos[i].data->time_to_die)))
 	{
-		philos_msg(DIED, get_time() - philos[i].data->creation_time, \
-					philos[i].id, philos[0].data->print_mutex);
-		return (1); //1, если философ умер
+		philos_msg(DIED, philos);
+		return (1); // 1 if dead
 	}
 	return (0);
 }
 
-/* Основная функция мониторинга состояния философов
- * Запускается в отдельном потоке и постоянно проверяет:
- * 1. Достаточно ли поели все философы (если задано условие по приемам пищи)
- * 2. Не умер ли кто-то из философов
+/* In own thread always checks philo_routine
+ * (t_philo *)philos_void; - cast type to t_philo
+	/ Приведение типа указателя к массиву философов
+ * check if all ate
+ * 1 return ((void *)1) - if dead return dead
+ * @return:// NULL, if function is finished
  */
 void	*check_philo_routine(void *philos_void)
 {
@@ -60,37 +62,41 @@ void	*check_philo_routine(void *philos_void)
 	t_philo	*philos;
 
 	i = 0;
-	philos = (t_philo *)philos_void; // Приведение типа указателя к массиву философов
-	while (1) // Бесконечный цикл
+	philos = (t_philo *)philos_void;
+	while (1)
 	{
-		if (i >= philos[0].data->num_philos) // Если индекс превышает количество философов
-			i = 0; // Сбрасываем индекс на 0
-		if (philos[0].data->meals_required > 0) // Если философы должны есть
+		if (i >= philos[0].data->num_philos)
+			i = 0;
+		if (philos[0].data->meals_required > 0)
 		{
-			if (check_eat(philos) == 1) // Проверяем, все ли философы сыты
-				return (NULL); // Если да, завершаем выполнение
+			if (check_eat(philos) == 1)
+				return (NULL);
 		}
-		// Используем функцию для проверки смерти философа
-		if (check_death(philos, i) == 1) // Проверяем, не умер ли текущий философ
-			return ((void *) 1); // Если умер, завершаем выполнение
-		i++; // Переходим к следующему философу
-		usleep(200); // Задержка на 100 микросекунд
+		if (check_death(philos, i) == 1)
+		{
+			return ((void *)1);
+			break ;
+		}
+		i++;
+		// usleep(100);
 	}
-	return (NULL); // Возвращаем NULL, если функция завершилась
+	return (NULL);
 }
 
-/* Создает и запускает поток-наблюдатель за философами
- * @param philos: массив структур философов
- * @return: 0 при успехе, код ошибки при неудаче
+/* new thread for check_philo_routine
+ * waits for the checker thread, if join fails,
+	prevents further execution with an errmsg
+ * @return: 0 success, err_code - if error
  */
 int	philo_checker(t_philo *philos)
 {
 	pthread_t	checker;
 
-	// Создаем новый поток, который выполняет функцию check_philo_routine
-	if (pthread_create(&checker, NULL, check_philo_routine, (void *)philos) != 0)
-		return (error_msg(PTHREAD_ERROR)); // Обработка ошибки при создании потока
-	if (pthread_join(checker, NULL) != 0)// Ожидаем завершения потока
-		return (error_msg(PTHREAD_ERROR)); // Обработка ошибки при ожидании потока
+	//
+	if (pthread_create(&checker, NULL, check_philo_routine,
+			(void *)philos) != 0)
+		return (error_msg(PTHREAD_ERROR));
+	if (pthread_join(checker, NULL) != 0)
+		return (error_msg(PTHREAD_ERROR));
 	return (0);
 }

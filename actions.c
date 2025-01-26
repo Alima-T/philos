@@ -6,7 +6,7 @@
 /*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:30 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/13 22:16:01 by alima            ###   ########.fr       */
+/*   Updated: 2025/01/26 21:20:55 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,30 @@
 ** 7. Ждем time_to_eat миллисекунд
 ** 8. Освобождаем вилки */
 
-void	eat_or_sleep(long time)
+void	eat_or_sleep(u_int64_t time)
 {
-	long	start;
-	long	stop;
+	u_int64_t	start;
+	u_int64_t	stop;
 
 	start = get_time();
 	stop = start + time;
 	while (stop > start)
 	{
-		usleep(50);
+		usleep(1000);
 		start = get_time();
 	}
 }
+void	take_forks(t_philo *philos)
+{
+	pthread_mutex_lock(philos->left_fork);
+	philos_msg(LEFT_FORK_TAKEN, philos);
+	pthread_mutex_lock(philos->right_fork);
+	philos_msg(RIGHT_FORK_TAKEN, philos);
+}
+
 void	eat(t_philo *philos)
 {
-	philos_msg(EATING, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(EATING, philos);
 	philos->last_meal = get_time();
 	eat_or_sleep(philos->data->time_to_eat);
 	pthread_mutex_unlock(philos->left_fork);
@@ -51,40 +58,11 @@ void	eat(t_philo *philos)
 	}
 }
 
-
 void	sleep_think(t_philo *philos)
 {
-	philos_msg(SLEEPING, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
+	philos_msg(SLEEPING, philos);
 	eat_or_sleep(philos->data->time_to_sleep);
 }
-/* Функция сна и размышления философа
-** 1. Выводим сообщение о начале сна
-** 2. Спим time_to_sleep миллисекунд
-** 3. Выводим сообщение о начале размышлений */
-// void	sleep_think(t_philo *philo)
-// {
-// 	print_status(philo, "is sleeping");
-// 	smart_sleep(philo->data->time_to_sleep);
-// 	print_status(philo, "is thinking");
-// }
-
-void	take_forks(t_philo *philos)
-{
-	pthread_mutex_lock(philos->left_fork);
-	philos_msg(LEFT_FORK_TAKEN, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
-	pthread_mutex_lock(philos->right_fork);
-	philos_msg(RIGHT_FORK_TAKEN, get_time() - philos->data->creation_time, \
-				philos->id, philos->data->print_mutex);
-}
-/* Основная функция потока философа
-** 1. Приводим void* к t_philo*
-** 2. Для четных философов добавляем задержку (предотвращение дедлока)
-** 3. Пока философ жив и не съел необходимое количество раз:
-**    - Едим
-**    - Спим
-**    - Думаем */
 
 void	*philo_routine(void *arg)
 {
@@ -93,32 +71,14 @@ void	*philo_routine(void *arg)
 	philos = (t_philo *)arg;
 	philos->last_meal = get_time();
 	philos->meals_eaten = 0;
-	if (!(philos->id % 2))
-		usleep(1000);
+	if (!(philos->id % 2)) // first Even-ID Philosophers (P0, P2)
+		usleep(100);
 	while (1)
 	{
 		take_forks(philos);
 		eat(philos);
 		sleep_think(philos);
-		philos_msg(THINKING, get_time() - philos->data->creation_time, philos->id, \
-					philos->data->print_mutex);
+		philos_msg(THINKING, philos);
 	}
 	return (NULL);
 }
-// void	*philo_routine(void *arg)
-// {
-// 	t_philo	*philo;
-
-// 	philo = (t_philo *)arg;
-// 	if (philo->id % 2 == 0)
-// 		usleep(1000);
-// 	while (!check_death(philo))
-// 	{
-// 		if (philo->data->meals_required != -1
-// 			&& philo->meals_eaten >= philo->data->meals_required)
-// 			break ;
-// 		eat(philo);
-// 		sleep_think(philo);
-// 	}
-// 	return (NULL);
-// }
