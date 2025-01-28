@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 19:25:55 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 14:22:08 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:04:25 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	check_eat(t_philo *philos)
 int	check_death(t_philo *philos, int i)
 {
 	// check if time from last meal is more than time to live
-	if ((get_time() - philos[i].time_last_ate) >= ((philos[i].data->time_to_die)))
+	if ((get_time()
+			- philos[i].time_last_ate) >= ((philos[i].data->time_to_die)))
 	{
 		philos_msg(DIED, philos);
 		return (1); // 1 if dead
@@ -51,10 +52,9 @@ int	check_death(t_philo *philos, int i)
 
 /* In own thread always checks philo_routine
  * (t_philo *)philos_void; - cast type to t_philo
-	/ Приведение типа указателя к массиву философов
  * check if all ate
- * 1 return ((void *)1) - if dead return dead
- * @return:// NULL, if function is finished
+ * @return:// NULL, if func is finished/ 1 return ((void *)1)
+	- if dead return dead
  */
 void	*check_philo_routine(void *philos_void)
 {
@@ -92,7 +92,6 @@ int	philo_checker(t_philo *philos)
 {
 	pthread_t	checker;
 
-	//
 	if (pthread_create(&checker, NULL, check_philo_routine,
 			(void *)philos) != 0)
 		return (error_msg(PTHREAD_ERROR));

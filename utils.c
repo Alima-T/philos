@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 19:08:34 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 14:55:37 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:23:00 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@
  * gettimeofday get time since the Unix epoch (January 1, 1970)
  */
 
-
-u_int64_t get_time(void)
+u_int64_t	get_time(void)
 {
-    struct timeval time;
-    gettimeofday(&time, NULL);
-    return (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000) + (time.tv_usec / 1000);
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -88,7 +88,6 @@ void	philos_msg(char *msg, t_philo *philo)
 // 		printf("%lu %d %s\n", time, philo->id, msg);
 // 	pthread_mutex_unlock(philo->data->print_mutex);
 // }
-
 
 int	ft_atoi_pos(const char *str)
 {

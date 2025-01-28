@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 14:43:23 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:24:29 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *fork)
 	}
 }
 
-/* destroy mutexes for data_output and left_fork */ 
+/* destroy mutexes for data_output and left_fork */
 void	destroy_mutex(t_philo *philos, t_data *data)
 {
 	int	i;
@@ -79,7 +79,7 @@ void	destroy_mutex(t_philo *philos, t_data *data)
 }
 
 /* fix start_time, allocate mem for array of philo's threads,
- * @param creates thread for each philo 
+ * @param creates thread for each philo
  * @return:  1 - error, 0 - success
  */
 int	run_threads(t_philo *philos, t_data *data)
@@ -116,7 +116,6 @@ int	run_threads(t_philo *philos, t_data *data)
 	return (0);
 }
 
-
 /** v2 */
 // int	run_threads(t_philo *philos, t_data *data)
 // {
@@ -131,7 +130,8 @@ int	run_threads(t_philo *philos, t_data *data)
 // 	i = 0;
 // 	while (i < data->num_philos)
 // 	{
-// 		if (pthread_create(&philo_ths[i], NULL, philo_routine,(void *)&philos[i]) != 0)
+// 		if (pthread_create(&philo_ths[i], NULL,
+//				philo_routine,(void *)&philos[i]) != 0)
 // 		{
 // 			while (--i >= 0) // Join already-created threads
 // 				pthread_join(philo_ths[i], NULL);
@@ -174,9 +174,8 @@ int	run_threads(t_philo *philos, t_data *data)
 // 	return (0);
 // }
 
-
 /* allocate mem for philos, forks and mutex_for_data_output
- * @param creates thread for each philo 
+ * @param creates thread for each philo
  * @return:  1 - error, 0 - success
  */
 int	start_sim(t_data *data)

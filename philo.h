@@ -6,7 +6,7 @@
 /*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 19:26:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 14:57:21 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:23:20 by aokhapki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,16 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-	int 			id;          /* Номер философа */
-	int 			meals_eaten; /* Кол-во приемов пищи */
-	int 			is_full;     /* */
+	int id;          /* Номер философа */
+	int meals_eaten; /* Кол-во приемов пищи */
+	int is_full;     /* */
 	int				eating;
-	int 			is_dead; //
-	u_int64_t 		time_last_ate;   /* Время последнего приема пищи */
+	int is_dead;             //
+	u_int64_t time_last_ate; /* Время последнего приема пищи */
 	u_int64_t		time_to_die;
-	t_data 			*data;       /* Указатель на общие данные */
+	t_data *data; /* Указатель на общие данные */
 	pthread_mutex_t	lock;
-	pthread_t 		thread;            /* Идентификатор потока философа */
+	pthread_t thread;            /* Идентификатор потока философа */
 	pthread_mutex_t *left_fork;  /* Указатель на левую вилку */
 	pthread_mutex_t *right_fork; /* Указатель на правую вилку */
 }					t_philo;
