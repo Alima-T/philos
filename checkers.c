@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/01 19:25:55 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 15:04:25 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/29 09:24:02 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	*check_philo_routine(void *philos_void)
 			break ;
 		}
 		i++;
-		// usleep(100);
+		usleep(100);
 	}
 	return (NULL);
 }

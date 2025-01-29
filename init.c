@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aokhapki <aokhapki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alima <alima@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 12:15:38 by aokhapki          #+#    #+#             */
-/*   Updated: 2025/01/28 15:24:29 by aokhapki         ###   ########.fr       */
+/*   Updated: 2025/01/29 09:37:46 by alima            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,82 +97,20 @@ int	run_threads(t_philo *philos, t_data *data)
 			return (error_msg(PTHREAD_ERROR));
 		i++;
 	}
-	if (philo_checker(philos) != 0)
-		return (1);
-	// Detaches each philosopher thread to allow resources to be freed automatically when the thread exits;
+	check_philo_routine((void *)philos); //add checker
 	i = 0;
 	while (i < data->num_philos)
 	{
-		// printf("Before detjoin\n");
-		// if (pthread_join(philo_ths[i], NULL) != 0) //infinity loop
-		if (pthread_detach(philo_ths[i]) != 0) // looks working, check leaks
+		if (pthread_detach(philo_ths[i]) != 0)
 			return (error_msg(PTHREAD_ERROR));
-		// pthread_join(philo_ths[i], NULL); //stops and does not join
-		// printf("After detjoin\n");
 		i++;
-	}
+	}		
+	if (philo_checker(philos) != 0) // replace checker under detach
+		return (1);
 	destroy_mutex(philos, data);
 	free(philo_ths);
 	return (0);
 }
-
-/** v2 */
-// int	run_threads(t_philo *philos, t_data *data)
-// {
-// 	int			i;
-// 	pthread_t	*philo_ths;
-
-// 	philo_ths = malloc(sizeof(pthread_t) * data->num_philos);
-// 	if (!philo_ths)
-// 		return (error_msg(MALLOC_ERROR));
-// 	data->creation_time = get_time();
-
-// 	i = 0;
-// 	while (i < data->num_philos)
-// 	{
-// 		if (pthread_create(&philo_ths[i], NULL,
-//				philo_routine,(void *)&philos[i]) != 0)
-// 		{
-// 			while (--i >= 0) // Join already-created threads
-// 				pthread_join(philo_ths[i], NULL);
-// 			free(philo_ths);
-// 			return (error_msg(PTHREAD_ERROR));
-// 		}
-// 		i++;
-// 	}
-// 	if (philo_checker(philos) != 0)
-// 	{
-// 		i = 0;
-// 		while (i < data->num_philos)
-// 		{
-// 			printf("Before join\n");
-// 			pthread_join(philo_ths[i], NULL);
-// 			printf("After join\n");
-// 			i++;
-// 		}
-// 		free(philo_ths);
-// 		printf("after free1\n");
-// 		return (1);
-// 	}
-
-// 	// Join threads after successful execution
-// 	i = 0;
-// 	while (i < data->num_philos)
-// 	{
-// 		printf("Before detjoin\n");
-// 		// pthread_join(philo_ths[i], NULL);
-// 		if (pthread_detach(philo_ths[i]) != 0)
-// 			return (error_msg(PTHREAD_ERROR));
-// 		printf("After detjoin\n");
-// 		i++;
-// 	}
-// 	printf("After loop with join\n");
-// 	destroy_mutex(philos, data);
-// 	printf("after destroy\n");
-// 	free(philo_ths);
-// 	printf("after free2\n");
-// 	return (0);
-// }
 
 /* allocate mem for philos, forks and mutex_for_data_output
  * @param creates thread for each philo
